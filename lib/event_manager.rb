@@ -47,7 +47,7 @@ def strip_hours(datetime)
 end
 
 def strip_days(datetime)
-  Time.strptime(datetime, '%m/%d/%Y %k:%M').strftime('%A')
+  DateTime.strptime(datetime, '%m/%d/%y %k:%M').wday
 end
 
 def best_hour(reg_hours)
@@ -69,6 +69,8 @@ contents = CSV.open(
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 
+day_of_week = { 0 => 'Sunday', 1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday',
+                6 => 'Saturday' }
 reg_hours = []
 reg_days = []
 
@@ -86,7 +88,7 @@ contents.each do |row|
   save_thank_you_letter(id, form_letter)
 end
 
-puts "The best hours to advertise are #{best_hour(reg_hours)}h"
-puts "The best days to advertise are: #{best_day(reg_days)}"
+puts "The best hour to advertise is at: #{best_hour(reg_hours)}h"
+puts "The best day to advertise is: #{day_of_week[best_day(reg_days)]}"
 
 puts 'EventManager finalized.'
